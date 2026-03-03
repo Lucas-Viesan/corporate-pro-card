@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CorporateProCard.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260223232345_RelacionandoFuncionarioECartao")]
-    partial class RelacionandoFuncionarioECartao
+    [Migration("20260224224614_RelacionandoEProtegendoEntidades")]
+    partial class RelacionandoEProtegendoEntidades
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

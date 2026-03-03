@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CorporateProCard")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3d66642e259e5c663bae0f864a58f40e302fb057")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+63821392dcac24f64a10b51f1034e3ebff82232a")]
 [assembly: System.Reflection.AssemblyProductAttribute("CorporateProCard")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CorporateProCard")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

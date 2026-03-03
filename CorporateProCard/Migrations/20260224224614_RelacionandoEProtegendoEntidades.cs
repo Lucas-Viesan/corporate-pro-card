@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CorporateProCard.Migrations
 {
-    public partial class RelacionandoFuncionarioECartao : Migration
+    public partial class RelacionandoEProtegendoEntidades : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
