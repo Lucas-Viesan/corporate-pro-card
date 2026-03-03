@@ -30,12 +30,35 @@ namespace CorporateProCard.Models
 
         public void Inativar() 
         {
+            if (Status == StatusFuncionario.Inativo)
+                throw new InvalidOperationException("Funcionário já está inativo.");
+
             Status = StatusFuncionario.Inativo;
 
             if (Cartao != null)
+                Cartao.Bloquear("Funcionário inativado");
+            
+        }
+
+        private void TentarConcederCartao()
+        {
+            if ((Cartao == null || Cartao.Status == StatusCartao.Bloqueado) && Status == StatusFuncionario.Ativo && this.DataAdmissao <= DateTime.Now.AddMonths(-3) && Salario > 2000m)
             {
-               Cartao.Bloquear("Funcionário inativado");
+                Cartao = new CartaoBeneficio(this);
             }
         }
+
+        public void Reativar() 
+        {
+            if(Status == StatusFuncionario.Ativo)
+                throw new InvalidOperationException("Funcionário já está ativo.");
+                    if(Status == StatusFuncionario.Desligado)
+                        throw new InvalidOperationException("Funcionário está desligado e não pode ser reativado.");
+            Status = StatusFuncionario.Ativo;
+                TentarConcederCartao();
+
+        }
+
+ 
     }
 }
