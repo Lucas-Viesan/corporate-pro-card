@@ -1,4 +1,5 @@
 ﻿using CorporateProCard.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
 
 namespace CorporateProCard.Models
@@ -16,21 +17,27 @@ namespace CorporateProCard.Models
         public NivelAcesso NivelAcesso { get; private set; }
         public CartaoBeneficio Cartao { get; private set; }
 
+
+        private bool EhElegivelParaCartao()
+        {
+            return (Cartao == null || Cartao.Status == StatusCartao.Bloqueado) && Status == StatusFuncionario.Ativo && this.DataAdmissao <= DateTime.Now.AddMonths(-3) && Salario > 2000m;
+        }
+
         public void ConcederCartao()
         {
-            if ((Cartao == null || Cartao.Status == StatusCartao.Bloqueado) && Status == StatusFuncionario.Ativo && this.DataAdmissao <= DateTime.Now.AddMonths(-3) && Salario > 2000m)
+            if (!EhElegivelParaCartao())
             {
-                Cartao = new CartaoBeneficio(this);
+                throw new InvalidOperationException("Funcionário não possui critérios válidos para cartão benefício");
             }
             else
             {
-                throw new InvalidOperationException("Funcionário não possui critérios válidos para cartão benefício");
+                Cartao = new CartaoBeneficio(this);
             }
         }
 
         public void Inativar() 
         {
-            if (Status == StatusFuncionario.Inativo)
+            if (Status == StatusFuncionario.Inativo )
                 throw new InvalidOperationException("Funcionário já está inativo.");
 
             Status = StatusFuncionario.Inativo;
@@ -42,9 +49,20 @@ namespace CorporateProCard.Models
 
         private void TentarConcederCartao()
         {
-            if ((Cartao == null || Cartao.Status == StatusCartao.Bloqueado) && Status == StatusFuncionario.Ativo && this.DataAdmissao <= DateTime.Now.AddMonths(-3) && Salario > 2000m)
+            if (EhElegivelParaCartao())
             {
                 Cartao = new CartaoBeneficio(this);
+            }
+        }
+
+        public void AlterarSalario(decimal novoSalario)
+        {
+            if (novoSalario <= 0)
+                throw new ArgumentException("Salário deve ser maior que zero.");
+            Salario = novoSalario;
+            if (Cartao != null && Cartao.Status == StatusCartao.Ativo && !EhElegivelParaCartao())
+            {
+                Cartao.Bloquear("Salário abaixo do limite para cartão benefício");
             }
         }
 
@@ -59,6 +77,19 @@ namespace CorporateProCard.Models
 
         }
 
- 
+        public void Desligar() 
+        {
+            if(Status == StatusFuncionario.Ativo || Status == StatusFuncionario.Inativo)
+            {
+                if (Status == StatusFuncionario.Desligado)
+                    throw new InvalidOperationException("Funcionário já está desligado.");
+
+                Status = StatusFuncionario.Desligado;
+
+                if (Cartao != null && Cartao.Status == StatusCartao.Ativo)
+                    Cartao.Bloquear("Funcionário desligado.");
+            }
+        }
+   
     }
 }

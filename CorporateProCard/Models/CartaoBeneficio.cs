@@ -41,6 +41,10 @@ namespace CorporateProCard.Models
             {
                 throw  new InvalidOperationException("Cartão já está bloqueado");
             }
+            if (string.IsNullOrWhiteSpace(motivo))
+            {
+                throw new ArgumentException("Motivo de bloqueio deve ser fornecido");
+            }
             Status = StatusCartao.Bloqueado;
             MotivoBloqueio = motivo;
         }
